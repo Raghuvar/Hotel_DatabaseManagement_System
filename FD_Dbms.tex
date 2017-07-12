@@ -1,0 +1,102 @@
+\documentclass[a4,12pt]{report}
+\usepackage{graphicx,amsmath,amssymb,amsfonts,listings,color}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{setspace}
+\usepackage{fixltx2e}
+\usepackage{multicol}
+\usepackage[normalem]{ulem}
+%% Please revise the following command, if your babel
+%% package does not support en-US
+
+\usepackage{geometry}
+\geometry{top=10mm, left=30mm, right=30mm, bottom=10mm}
+\usepackage{url}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=none,
+  language=sql,				% whatever language you can choose
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+
+\title{ Project Report \\
+				 \textbf{Databse Management System}} 
+
+\author{\textbf{Group\_7}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+
+\section*{Relations and their Functional Dependencies}
+
+
+\begin{flushleft}
+ \textbf{ Functional Dependencies for all the relations:} \\
+ \end{flushleft}
+
+
+1- \textbf{Guest}(\uline{guest\_id} ,  entity\_time)  \\
+		\textbf{ FD-} guest\_id $ \rightarrow $ entity\_time \\
+
+2- \textbf{Company}(\uline{guest\_id}, cname, location) \\
+	\textbf{FD-} guest\_id $ \rightarrow $ cname\\
+				\hspace{ 2.00cm }	guest\_id $ \rightarrow $ location \\
+					
+3- \textbf{Company\_Members}(\uline{guest\_id, name}, age, designation )\\
+	\textbf{FD-} 		guest\_id , name $ \rightarrow $   age \\
+						guest\_id, name $ \rightarrow $ designation \\
+
+4- \textbf{Family}(\uline{guest\_id} , Head\_Ssn , Address, Mobile\_no. , Adults , Children ) \\
+\textbf{FD-} 	guest\_id $ \rightarrow $ Head\_Ssn \\
+				guest\_id $ \rightarrow $ Mobile\_no. \\
+				guest\_id $ \rightarrow $ Adults \\
+				guest\_id $ \rightarrow $ Children \\
+
+
+5- \textbf{Family\_Members} (\uline{guest\_id} , \uline{name} , age) \\
+\textbf{FD-} guest\_id , name $ \rightarrow $ age \\
+
+6-	\textbf{Allot}(\uline{guest\_id} , \uline{room\_id} , Check\_in\_date , Check\_out\_date , Amount ) \\
+\textbf{FD-} guest\_id , room\_id $ \rightarrow $ Check\_in\_date , Check\_out\_date , Amount \\
+
+7-	\textbf{Room} (\uline{room\_no} , type, rate, status\_occupied) \\
+\textbf{FD-} room\_no $ \rightarrow $  type, rate, status\_occupied \\
+
+8- \textbf{Facility} (facility\_id , no\_of\_hours , rate , type) \\
+\textbf{FD-} facility\_id $ \rightarrow $ no\_of\_hours , rate , type \\
+
+9- \textbf{Food}(\uline{product\_id} , rate , type , name) \\
+\textbf{FD- } product\_id $ \rightarrow $ rate , type , name \\
+
+10- \textbf{Uses}(\uline{guest\_id, facility\_id} , quantity\_used) \\
+\textbf{FD-} guest\_id , facility\_id $ \rightarrow $ quantity\_used \\
+
+11- \textbf{Orders}((\uline{guest\_id , product\_id , date\_of\_time , time}  ) , quantity) \\
+\textbf{FD-} guest\_id , product\_id , date\_of\_time $ \rightarrow $ quantity \\
+
+12- \textbf{Bill}(guest\_id , amount, paying\_method, paying\_date ) \\
+\textbf{FD-} guest\_id $ \rightarrow $ amount, paying\_method, paying\_date \\
+
+
+\end{document}

@@ -1,0 +1,189 @@
+\documentclass[a4,12pt]{report}
+\usepackage{graphicx,amsmath,amssymb,amsfonts,listings,color}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{graphicx,amsmath,amssymb,amsfonts,listings,color}
+\usepackage{geometry}
+\geometry{top=10mm, left=30mm, right=30mm, bottom=10mm}
+\usepackage{url}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=none,
+  language=sql,				% whatever language you can choose
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+
+\title{ Project Report \\
+						\textbf{Databse Management System\\}
+						} 
+
+\author{\textbf{Group\_7}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\newpage
+\begin{center}
+ \textbf{Queries and their Relational Algebric Expression}
+\end{center}
+
+\begin{flushleft}
+ \textbf{Qu-1}- List name,guest-id of families and company check\_in on 12-01-2015 ? \\\
+ 
+  \textbf{Ans-} Relational Algebra- \\\ 
+  
+                  $ r1 \leftarrow \sigma_{check\_in\_date = 12-01-2015}(family \bowtie_{family.guest\_id = Allot.guest\_id} Allot ) $  \\\
+                  
+              $ r2 \leftarrow \sigma_{check\_in\_date = 12-01-2015}(company \bowtie_{company.guest\_id = Allot.guest\_id} Allot ) $ \\\
+              
+              $ r3 \leftarrow ( r1 \cup r2)$  \\\
+              
+              $ r4 \leftarrow \pi_{Headssn,Cname}(r3)  $ \\\
+              
+ \textbf{ Qu-2}- List out No. of rooms that are vacant? \\\
+ 
+ \textbf{Ans-} Relational Algebra- \\\
+ 
+ 			$ r1 \leftarrow \sigma_{status.occupied = ' False '}(Allot)$ \\\
+ 			
+ 			$ r2 \leftarrow \pi_{room-no.}(r1)$ \\\
+ 			
+ \textbf{ Qu-3}- List out No. of rooms that are Full? \\\
+ 
+ \textbf{Ans-} Relational Algebra- \\\
+ 
+ 			$ r1 \leftarrow \sigma_{status.occupied = ' True '}(Allot)$ \\\
+ 			
+ 			$ r2 \leftarrow \pi_{room-no.}(r1)$ \\\
+ 			
+\textbf{Qu-4-} List out guest\_id with their room-no. that are of family type ?\\\
+
+\textbf{Ans-} Relational Algebra- \\\
+
+			$ r1 \leftarrow (family \bowtie Allot) $ \\\
+			
+			$ r2 \leftarrow \pi_{room-no.}(r1) $ \\\
+			
+\textbf{Qu-5-} List out the facility\_id used by guest that lives in room-no = A101 ? \\\
+
+\textbf{ Ans- } Relational Algebra- \\\
+
+			$ r1 \leftarrow \sigma_{room-no. = A101}(Allot) $ \\\
+			
+			$ r2 \leftarrow \pi_{guest\_id}(r1) $ \\\
+			
+			$ r3 \leftarrow (r2 \bowtie_{r2.guest\_id = Uses.guest\_id} Uses) $ \\\
+			
+			$ r4 \leftarrow \pi_{facility\_id}(r3) $ \\\
+			
+\textbf{Qu-6-} List out most frequent facility type used by guests ? \\\
+
+\textbf{Ans-} Relational Algebra- \\\
+
+			$ r1(max-count) \leftarrow F_{count(facility\_id)}(uses \bowtie facility) $ \\\
+			
+			$ r2 \leftarrow F_{max(max-count)}(r1) $  \\\
+			
+\textbf{ Qy-7-} Count the occurence of family ? \\\
+
+\textbf{Ans-} Relational Algebra - \\\
+
+			$ r1 \leftarrow F_{count(Head\_ssn)}(family) $ \\\
+			
+\textbf{Qu-8-} List out the guest\_id who have room type = $ 'superior' $ ? \\\
+
+\textbf{Ans- } Relational Algebra- \\\
+
+			$ r1 \leftarrow \sigma_{type = 'superior-suite'}(Room) $ \\\
+			
+			$ r2 \leftarrow \pi_{guest\_id}(Allot  \bowtie_{Allot.room-no. = r1.room-no,} r1 ) $ \\\
+			
+\textbf{Qu-9-} Total amount paid by company type guest ? \\\
+
+\textbf{Ans-} Relational Algebra- \\\
+
+			$ r1 \leftarrow F_{sum(amount)}(company \bowtie bill) $ \\\
+			
+\textbf{Qu-10-} Total amount paid by family type guest ? \\\
+
+\textbf{Ans-} Relational Algebra- \\\
+
+			$ r1 \leftarrow F_{sum(amount)}(family \bowtie bill) $ \\\
+			
+\textbf{Qu-11-} Total amount from both company and families ? \\\
+
+\textbf{Ans-} Relational Algebra- \\\
+
+			$ r1 \leftarrow F_{sum(amount)}(bill) $ \\\
+
+\textbf{Qu-12-} List out Name of company with most number of guest ? \\\
+
+\textbf{Ans-} Relational Algebra- \\\
+
+			$ r1 \leftarrow (company \bowtie_{company.name = company\_members.cname} company\_members) $ \\\
+			
+			$ r2(guest\_id,count) \leftarrow   _{guest\_id} F_{guest\_id,count(cname)}(r1) $ \\\
+			
+			$ r3 \leftarrow  F_{max(count)}(r2) $ \\\
+			
+			
+\textbf{Qu-13-} List out all the guest\_id who have not acquired any room? \\\
+
+\textbf{Ans-} Relational Algebra - \\\
+
+			$ r1 \leftarrow \pi_{guest\_id}(guest) $ \\\
+			
+			$ r1 \leftarrow \pi_{guest\_id}(Allot) $ \\\
+			
+			$ r3 \leftarrow (r1-r2) $ \\\
+			
+			$ r1 \leftarrow \pi_{guest\_id}(r3) $ \\\
+			
+\textbf{Qu-14-} Most profitable customer, guest\_id of family type ? \\\
+
+\textbf{Ans-} Relational Algebra- \\\
+
+			$ r1 \leftarrow Bill \bowtie family $ \\\
+			
+			$ r2(max) \leftarrow F_{max(count)}(r1) $ \\\
+			
+			$ r3 \leftarrow \pi_{guest\_id}(r2 \bowtie Bill ) $ \\\
+			
+			
+\textbf{Qu-15-} Most profitable customer, guest\_id of company type ? \\\
+
+\textbf{Ans-} Relational Algebra- \\\
+
+			$ r1 \leftarrow Bill \bowtie company $ \\\
+			
+			$ r2(max) \leftarrow F_{max(count)}(r1) $ \\\
+			
+			$ r3 \leftarrow \pi_{guest\_id}(r2 \bowtie Bill ) $ \\\
+			
+
+
+                 
+ \end{flushleft}
+
+\end{document}          

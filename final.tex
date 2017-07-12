@@ -1,0 +1,2192 @@
+\documentclass[a4,12pt]{report}
+\usepackage{graphicx,amsmath,amssymb,amsfonts,listings,color}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{graphicx,amsmath,amssymb,amsfonts,listings,color}
+\usepackage{geometry}
+\usepackage{graphicx,amsmath,amssymb,amsfonts,listings,color}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{setspace}
+\usepackage{fixltx2e}
+\usepackage{multicol}
+\usepackage[normalem]{ulem}
+\geometry{top=10mm, left=30mm, right=30mm, bottom=10mm}
+\usepackage{url}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=none,
+  language=sql,				% whatever language you can choose
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\title{ Project Report \\
+						\textbf{Databse Management System}\\ Instructor : Prof. PM Jat } 
+\author{\textbf{Group$-$7} \\
+			Kushal Jangid (201351022)\\
+			Raghuvar Prajapati (201351003)\\
+			Sameer Bhati (201352013)\\
+			Rahul Nalawade (201351017) }
+\date{\today}
+
+\begin{document}
+\maketitle
+\section*{Introduction :} Hotel Management System is a Database Management project for the course CS205 DBMS. Group \#07 has successfully completed the structured design of the HMS considering the efficiency, compactibility, reliability and convenient multi-user accessibility to the system.\\\\
+	HMS is not only able to have a massive data storage, but also keeps the data secure and efficiently updates the database. It has been designed according to the requirements of a normal Hotel, providing general guest-services in ambience.\\\\
+HMS is developed in such a manner that, it can resolve every data keeping related to a customer (guest). It can store, manipulate, remove and update data in customer's perspective. 
+
+
+Project Outline:
+	Hotel Management System considers a following relations to manage data of customers from the moment he/she enters, till he/she exists.\\
+
+\#Relation ($<$attribute\_list$>$)
+
+\begin{itemize}
+\item Guest (guest\_id, entry\_time)\\
+\item Family (guest\_id, family\_head\_ssn, address, mobile\_no, no\_of\_adults, no\_of\_children)\\
+\item Family\_Member (guest\_id, name, age)\\
+\item Company (guest\_id, cname, location)\\
+\item Company\_Member (guest\_id, name, age, designation)\\
+\item Alloted (guest\_id, room\_no, check\_in\_date, check\_out\_date)\\
+\item Room (room\_no, type, rate, status\_occupied)\\
+\item Orders (guest\_id, product\_id, date\_of\_orders, time)\\
+\item Food (product\_id, type, rate, name)\\
+\item Uses (guest\_id, facility\_id, quantity\_used)\\
+\item Facility (facility\_id, rate, no\_of\_hours, facility\_type)\\
+\item Bill (guest\_id, amount, payment\_date, paying\_method)\\
+\end{itemize}
+\newpage
+\section*{Hotel Management System:} -
+This is a real world scenario that we often see in the present world. We have created a database that will take care of the different guest with their information.\\
+\subsection*{Relational Schema of the hotel management system:}
+Relational Scheme Diagram :\\
+\begin{figure}[hbtp]
+\centering
+\includegraphics[height = 0.6\columnwidth]{Diagram1} \\
+
+\caption{\textbf{{\color{red}Hotel Management System - Relational Schema Diagram}}}
+\end{figure}
+\newpage
+\subsection*{DDL Script :}
+This is the all the tables that we have created for the database with all constraint that an attribute is follow to maintain consistency. 
+\begin{lstlisting}
+DROP SCHEMA hotel CASCADE;
+CREATE SCHEMA hotel;
+
+SET SEARCH_PATH TO hotel;
+
+create table Family(
+      Guest_ID          	varchar(5) ,
+      Family_Head_SSN   	varchar(9) ,
+      Address           	varchar(50),
+      Mobile_No          	decimal(10,0),
+      No_Of_Adults      	smallint,
+      No_Of_Children    	smallint,
+      primary key(Guest_ID),
+      foreign key(Guest_ID) references Guest(Guest_ID)
+       ON DELETE CASCADE
+);
+create table Company(
+      Guest_ID              varchar(5) primary key,
+      CName                 varchar(40),
+      Location              varchar(50),
+      foreign key(Guest_ID) references Guest(Guest_ID)
+			ON DELETE CASCADE
+);
+
+create table Guest(
+       Guest_ID       varchar(5) primary key,
+       Entry_Time     timestamp
+  
+);
+
+create table Family_Members(
+       Guest_ID            varchar(5),
+       Name                varchar(40),
+       Age                 smallint,
+       primary key(Guest_ID,Name),
+       foreign key(Guest_ID) references Family(Guest_ID)
+               ON DELETE CASCADE
+);
+
+create table Company_Members(
+       Guest_ID     varchar(5),
+       Name         varchar(40),
+       Age          smallint,
+       Designation  varchar(40),
+       primary key(Name, Guest_ID),
+       foreign key(Guest_ID)  references Company(Guest_ID)
+                ON DELETE CASCADE
+);
+
+create table Room(
+       Room_No         varchar(5) primary key,
+       Type            varchar(50),
+       Rate            int,
+       Status_Occupied boolean
+);
+
+create table Alloted(
+       Guest_ID        varchar(5),
+       Room_No         varchar(5),
+       Check_in_date   Date,
+       Check_out_date  Date,
+       primary key(Guest_ID, Room_No),
+       foreign key(Guest_ID)  references Guest(Guest_ID)
+                ON DELETE CASCADE,     
+       foreign key(Room_No) references Room(Room_No)
+                ON DELETE CASCADE
+);
+
+create table BILL (
+       Guest_ID          varchar(5) primary key,
+       Amount            int,
+       Payment_Date      Date,
+       Paying_Method     varchar(20),
+       foreign key(Guest_ID)  references Guest(Guest_ID)
+                ON DELETE CASCADE
+);
+
+CREATE TABLE Facility (
+	Facility_id	varchar(5) primary key,
+	Rate		int,
+	No_of_hours     int,
+	Facility_type	varchar(40)
+   
+);
+
+create table uses (
+        Guest_ID       varchar(5),
+        Facility_id    varchar(5),
+        Quantity_used  int,
+        primary key(Guest_ID, Facility_id),
+        foreign key(Guest_ID)  references Guest(Guest_ID)
+                ON DELETE CASCADE,     
+        foreign key(Facility_id) references Facility(Facility_id)
+                ON DELETE CASCADE
+);
+
+        
+create table Food (
+        Product_ID   varchar(5) primary key, 
+        Rate         int,
+        Type         varchar(60),
+        Name         varchar(60)
+);
+
+
+
+create table Orders (
+        Guest_ID        varchar(5),
+        Product_ID      varchar(5),
+        Date_Of_Orders  Date,
+        Time            TIME,
+        Quantity        smallint,
+        primary key(Guest_ID, Product_ID, Date_of_Orders, Time),
+        foreign key(Guest_ID)  references Guest(Guest_ID)
+                ON DELETE CASCADE,     
+        foreign key(Product_ID) references Food(Product_ID)
+                ON DELETE CASCADE
+);
+\end{lstlisting}
+
+\subsection*{ER Diagram :} This is the ER Diagram for database that made relation more understandable.\\
+\begin{figure}[hbtp]
+\centering
+\includegraphics[height = 0.8\columnwidth]{New-ER} \\
+
+\caption{\textbf{{\color{red}Hotel Management System - Relational Schema Diagram}}}
+\end{figure}
+
+\newpage
+\subsection*{Relations and their Functional Dependencies}
+
+
+\begin{flushleft}
+ \textbf{ Functional Dependencies for all the relations:} \\
+ \end{flushleft}
+
+
+1- \textbf{Guest}(\uline{guest\_id} ,  entity\_time)  \\
+		\textbf{FD-} guest\_id $ \rightarrow $ \{ entity\_time  \}\\
+
+2- \textbf{Company}(\uline{guest\_id}, cname, location) \\
+	\textbf{FD-} guest\_id $ \rightarrow $ \{ cname \}\\
+				\hspace{ 2.00cm }	guest\_id $ \rightarrow $ \{ location \} \\
+					
+3- \textbf{Company\_Members}(\uline{guest\_id, name}, age, designation )\\
+	\textbf{FD-} 		\{ guest\_id , name \}$ \rightarrow $   \{ age \}\\
+						\{ guest\_id, name \}$ \rightarrow $ \{ designation \}\\
+
+4- \textbf{Family}(\uline{guest\_id} , head\_ssn , address, mobile\_no. , adults , no\_of\_children ) \\
+\textbf{FD-} 	guest\_id $ \rightarrow $ \{ head\_ssn \}\\
+				guest\_id $ \rightarrow $ \{ mobile\_no. \}\\
+				guest\_id $ \rightarrow $ \{ adults \}\\
+				guest\_id $ \rightarrow $ \{ no\_of\_children \}\\
+
+
+5- \textbf{Family\_Members} (\uline{guest\_id} , \uline{name} , age) \\
+\textbf{FD-} \{ guest\_id , name \} $ \rightarrow $ \{ age \}\\
+
+6-	\textbf{Alloted}(\uline{guest\_id} , \uline{room\_id} , check\_in\_date , check\_out\_date ) \\
+\textbf{FD-} \{ guest\_id , room\_id \} $ \rightarrow $ \{ check\_in\_date , check\_out\_date \} \\
+
+7-	\textbf{Room} (\uline{room\_no} , type, rate, status\_occupied) \\
+\textbf{FD-} room\_no $ \rightarrow $ \{ type, rate, status\_occupied \} \\
+
+8- \textbf{Facility} (facility\_id , no\_of\_hours , rate , type) \\
+\textbf{FD-} facility\_id $ \rightarrow $ \{ no\_of\_hours , rate , type \}\\
+
+9- \textbf{Food}(\uline{product\_id} , rate , type , name) \\
+\textbf{FD- } product\_id $ \rightarrow $ \{ rate , type , name \} \\
+
+10- \textbf{Uses}(\uline{guest\_id, facility\_id} , quantity\_used) \\
+\textbf{FD-} \{ guest\_id , facility\_id \} $ \rightarrow $ \{ quantity\_used \} \\
+
+11- \textbf{Orders}(\uline{guest\_id , product\_id , date\_of\_time , time} , quantity) \\
+\textbf{FD-} \{ guest\_id , product\_id , date\_of\_time \} $ \rightarrow $ \{ quantity \}\\
+
+12- \textbf{Bill}(guest\_id , amount, paying\_method, paying\_date ) \\
+\textbf{FD-} guest\_id $ \rightarrow $ \{ amount, paying\_method, paying\_date \} \\
+
+\newpage
+\subsection*{Relational Algebra AND SQL Queries:}
+Here we are giving the queries that our database is supposed to answer:
+
+\textbf{Qu-1} \textbf{  List out the total numbers of vacant rooms ?}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra1}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+
+\textbf{Qu-2} \textbf{ List out the total numbers of filled rooms ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra2}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-3} \textbf{ List the guest id with their room no, tpye of the room ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra3}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-4} \textbf{ List the guest id who only had food in hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra4}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-5} \textbf{ Find out the details of the very first customer of the hotel ?}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra5}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-6} \textbf{ List out the number of items in each type of food ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra6}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-7} \textbf{ List out the most ordered food items ate by the customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[height = 0.4\columnwidth]{ra7}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-8} \textbf{ List out guest id which uses all types of facilities ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra8}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+
+
+\textbf{Qu-10} \textbf{ List out the guest id who were alloted more than or equal to 2 rooms ?}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra10}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-11} \textbf{ Total Amount paid by the family type customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra11}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-12} \textbf{ Total Amount paid by the company type customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra12}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-13} \textbf{ Find out the name of that company that came with maximum number of employee ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra13}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-14} \textbf{ Most Profitable guest id that is of family type customer ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra14}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-15} \textbf{ Most Profitable guest id that is of company type customer ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra15}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-16} \textbf{ List out the Head SSN with Head Name who came twice to the hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra16}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-17} \textbf{ List the falility used by more than 10 customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra17}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-18} \textbf{ List out the different company names with their number of employees ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra18}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-19} \textbf{ List out the guest id of the family type with the maximum number of members with them ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra19}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-20} \textbf{ List out the facility used by the most number of customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra20-1}
+\caption{\textbf{{\color{red}}}}
+\end{figure}
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra20-2}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-21} \textbf{ Find out the total food amount on a particular date given by the customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.9\columnwidth]{ra21}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-22} \textbf{ List out the guest id that orders all types of foods ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra22}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-23} \textbf{ List out the total number of people who checked out on 11-01-2015 ?}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra23}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-24} \textbf{ List out the orders for the guest id - C1004 during his period of living ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.0\columnwidth]{ra24}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-25} \textbf{ List out the most frequently alloted room ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra25}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-26} \textbf{ Find out the average amount of bill paid by guests visting only for food ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra26}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-27} \textbf{ Find out the date on which the maximum number customers came to hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra27}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-28} \textbf{ List out the guest id that paid there bills by Cheque?
+}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.0\columnwidth]{ra28}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+
+\textbf{Qu-29} \textbf{ List out the guest id that paid there bills by Cash?
+}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra29}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-30} \textbf{ List out the guest id that paid there bills by Debit-Card ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra30}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-31} \textbf{ List name, guest id of families and company check in on 12-01-2015 ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra31}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-32} \textbf{ List out guest id with their room-no. that are of family type ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra32}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-33} \textbf{ List out guest id with their room-no. that are of company type ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra33}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-34} \textbf{ List out the facility id used by guest that lived in room-no = A101 ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra34}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-35} \textbf{ List out the date on which maximum number of customer of family tpye came to hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra35}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-36} \textbf{ List out the date on which maximum number of customer of company tpye came to hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra36}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\subsection*{SQL Queries:}
+\textbf{Qu\_1-} \textbf{List out the total numbers of vacant rooms ?} \\\
+
+\textbf{Ans-}  \textbf{SQl-} \\\
+
+\begin{lstlisting}
+			   SELECT		count(room.room_no)
+			   FROM			hotel.room 
+			   WHERE		room.status_occupied = no;
+\end{lstlisting}
+			
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.5\columnwidth]{fig1}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+
+
+\textbf{Qu\_2-} \textbf{List out the total numbers of filled rooms?}\\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+
+\begin{lstlisting}
+			   SELECT		count(room.room_no)
+			   FROM			hotel.room
+			   WHERE		room.status_occupied = yes;
+\end{lstlisting}
+
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.5\columnwidth]{fig2}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+
+\newpage
+\textbf{Qu\_3-}  \textbf{ List the guest\_id with their room\_no, tpye of the room?} \\\
+
+\textbf{Ans-}  \textbf{SQL-} \\\
+				
+\begin{lstlisting}
+			SELECT	alloted.guest_id, 
+						alloted.room_no, 
+ 		 	  			room.type
+ 		 	  FROM	hotel.room, 
+                 	hotel.alloted
+           WHERE	alloted.room_no = room.room_no;
+\end{lstlisting}
+				
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.6\columnwidth]{fig3}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_4-}  \textbf{List the guest\_id who only had food in hotel?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+
+\begin{lstlisting}
+					SELECT	guest.guest_id
+					FROM		hotel.guest
+				EXCEPT 
+					SELECT	alloted.guest_id 
+					FROM		hotel.alloted;
+\end{lstlisting}
+
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.3\columnwidth]{fig4}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_5-}  \textbf{Find out the details of the very first customer of the hotel?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT		.*
+					FROM ( SELECT guest.guest_id
+							FROM (SELECT min(guest.entry_time) AS m
+							FROM hotel.guest ) AS first
+							JOIN hotel.guest ON  first.m = guest.entry_time ) AS first1  NATURAL JOIN hotel.family;
+\end{lstlisting}
+
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.2\columnwidth]{fig5}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_6-}  \textbf{List out the number of items in each type of food?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT	food.type,
+								count(food.product_id) AS no_of_items 
+					FROM  		hotel.food
+					GROUP BY		food.type
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.4\columnwidth]{fig6}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+\newpage
+\textbf{Qu\_7-}  \textbf{List out the most ordered food items ate by the customers?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					DROP TABLE item_count;
+					CREATE TABLE item_count AS 
+					(SELECT	orders.product_id,
+							count(orders.guest_id) AS c
+					FROM			hotel.orders
+					GROUP BY		orders.product_id );
+					DROP TABLE  	max_item_count;
+					CREATE TABLE  	max_item_count AS 
+					(SELECT	max(c) AS  c FROM	item_count );
+					DROP TABLE 		max_item;
+					CREATE TABLE  	max_item AS
+					( SELECT  *
+						FROM item_count NATURAL JOIN max_item_count );
+					SELECT *
+					FROM	hotel.food NATURAL JOIN	max_item
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.0\columnwidth]{fig7}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_8-}  \textbf{List out guest\_id which uses all types of facilities?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT  *
+					FROM	hotel.guest AS  g
+					WHERE NOT EXISTS (( SELECT	f.facility_id 
+					FROM	hotel.facility AS  f )
+					EXCEPT ( SELECT	u.facility_id
+									FROM	hotel.uses AS  u
+									WHERE	u.guest_id = g.guest_id
+									));
+					
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.7\columnwidth]{fig8}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_9-}  \textbf{List guest\_id that lived in room\_no $=$ 'A401' and used facility\_id $=$ 'FC001?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT			alloted.room_no, 
+										alloted.guest_id,  
+										uses.facility_id
+					FROM 
+										hotel.alloted,
+										hotel.uses
+					WHERE 			uses.guest_id = alloted.guest_id   AND uses.facility_id = 'FC001' AND alloted.room_no = 'A401';
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.7\columnwidth]{fig9}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_10-}  \textbf{List out the guest\_id who were alloted more than or equal to 2 rooms.?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT		alloted.guest_id, 
+									count(alloted.room_no) AS no_of_rooms
+					FROM				hotel.alloted
+            	GROUP BY 		alloted.guest_id
+            	HAVING			count( alloted.room_no ) >= 2
+            	ORDER BY			alloted.guest_id ;
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.5\columnwidth]{fig10}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\newpage
+\textbf{Qu\_11-}  \textbf{Total Amount paid by the family type customers?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT 	sum(bill.amount) AS total_family_amount
+					FROM		hotel.bill, 
+								hotel.family
+					WHERE		family.guest_id = bill.guest_id;
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.3\columnwidth]{fig11}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_12-}  \textbf{Total Amount paid by the company type customers?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT 	sum(bill.amount) AS total_company_amount
+					FROM		hotel.bill, 
+								hotel.company
+					WHERE		company.guest_id = bill.guest_id;
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.4\columnwidth]{fig12}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\newpage
+\textbf{Qu\_13-}  \textbf{Find out the name of that company that came with maximum number of employee?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					DROP TABLE company_count;
+					CREATE TABLE company_count AS ( SELECT	company.name, 
+					count(company_members.name) AS no_of_employees
+					FROM	hotel.company, 
+							hotel.company_members
+					WHERE company.guest_id = company_members.guest_id AND company_members.cname = company.name GROUP BY	company.name );
+					DROP TABLE max_count;
+					CREATE TABLE max_count AS ( SELECT	max(no_of_employees) AS 							no_of_employees FROM company_count );
+					SELECT  *
+					FROM	max_count NATURAL JOIN	company_count;
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.6\columnwidth]{fig13}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_14-}  \textbf{Most Profitable guest\_id that is of family type customer?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					DROP TABLE 		family_amount ;
+					CREATE TABLE 		family_amount AS (
+					SELECT  max(bill.amount) AS amount
+					FROM				hotel.bill,
+										hotel.family
+					WHERE		family.guest_id = bill.guest_id );
+					SELECT *
+					FROM		hotel.bill NATURAL JOIN	family_amount
+\end{lstlisting}	
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.9\columnwidth]{fig14}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_15-}  \textbf{Most Profitable guest\_id that is of company type customer?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					DROP TABLE company_amount ;
+					CREATE TABLE comnpany_amount AS ( SELECT  max(bill.amount)
+					AS amount
+					FROM				hotel.bill, 
+										hotel.company
+					WHERE		company.guest_id = bill.guest_id );
+					SELECT  *
+					FROM	hotel.bill NATURAL JOIN	company_amount
+\end{lstlisting}			
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.9\columnwidth]{fig15}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_16-}  \textbf{List out the Head\_SSN with Head\_Name who came twice to the hotel?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT DISTINCT		f1.family_head_ssn, 
+												f1.family_head_name,  
+												count(f1.guest_id) 
+					FROM					hotel.family f1, 
+											hotel.family f2  
+					WHERE			f1.family_head_ssn = f2.family_head_ssn AND 								f1.guest_id != f2.guest_id 
+					GROUP BY			f1.family_head_ssn,
+										f1.family_head_name 
+					HAVING		count(f1.guest_id) = 2
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.8\columnwidth]{fig16}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\newpage
+\textbf{Qu\_17-}  \textbf{List the facility used by more than 10 customers?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT				uses.facility_id,
+										count(uses.guest_id) AS  c,
+										facility.facility_type
+					FROM				hotel.facility, 
+										hotel.uses
+					WHERE			uses.facility_id = facility.facility_id
+					GROUP BY		uses.facility_id,
+										facility.facility_type 
+					HAVING		count(uses.guest_id) >= 10
+					
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.7\columnwidth]{fig17}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_18-}  \textbf{List out the different company names with their number of employees?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT				company.cname,
+										count(company_members.name)
+					FROM				hotel.company_members,
+										hotel.company
+					WHERE		company_members.guest_id = company.guest_id 
+					GROUP BY		company.cname
+\end{lstlisting}						
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.5\columnwidth]{fig18}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+
+\textbf{Qu\_19-}  \textbf{List out the guest\_id of the family type with the maximum number of members with them?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					DROP TABLE 			f_members; 
+					CREATE TABLE 		f_members AS ( SELECT	family.guest_id,
+											sum(family.no_of_adults family.no_of_children) AS no_of_members
+					FROM		hotel.family  GROUP BY	family.guest_id );
+					DROP TABLE 		f1_members;
+					CREATE TABLE 	f1_members AS ( SELECT	max(no_of_members)  AS 											no_of_members FROM	f_members );
+					SELECT	*
+					FROM		f_members NATURAL  JOIN	f1_members
+\end{lstlisting}	
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.7\columnwidth]{fig19}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+
+\textbf{Qu\_20-}  \textbf{List out the facility used by the most number of customers?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					DROP TABLE 		facility_used;
+					CREATE TABLE 	facility_used AS ( SELECT facility.facility_type, 
+																			facility.facility_id, 
+																			count(uses.guest_id) AS facility_count
+										FROM			hotel.facility, 
+														hotel.uses
+										WHERE 		uses.facility_id = facility.facility_id
+					GROUP BY					facility.facility_id,
+												facility.facility_type );
+					DROP TABLE 			max_facility_used;
+					CREATE TABLE 		max_facility_used AS ( SELECT	max(facility_count) AS facility_count FROM		facility_used );
+					SELECT  *
+					FROM	max_facility_used  NATURAL JOIN	facility_used
+\end{lstlisting}					
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{fig20}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+
+
+\newpage	
+\textbf{Qu\_21-}  \textbf{Find out the total food amount on a particular date given by the customers?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT				orders.date_of_orders,
+											sum(food.rate * orders.quantity) 
+					FROM				hotel.orders,
+										hotel.food
+					WHERE				food.product_id = orders.product_id
+					GROUP BY			orders.date_of_orders 
+					ORDER BY   		orders.date_of_orders
+\end{lstlisting}					
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[height=0.7\columnwidth]{fig21}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\newpage				
+\textbf{Qu\_22-}  \textbf{List out the guest\_id that orders all types of foods?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT 	* 
+					FROM		hotel.guest AS  g
+					WHERE NOT EXISTS ( ( SELECT		food.type 
+													FROM		hotel.food  ) 
+				EXCEPT ( SELECT			food.type 
+								FROM			hotel.orders 
+					JOIN  hotel.food	ON orders.product_id = food.product_id             
+					WHERE	orders.guest_id = g.guest_id  
+					 ) ); 
+\end{lstlisting}					 
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.0\columnwidth]{fig22}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\newpage
+\textbf{Qu\_23-}  \textbf{List out the total number of people who checked out on 11-01-2015 ?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+\begin{lstlisting}
+					SELECT DISTINCT		alloted.check_out_date, 
+												alloted.guest_id
+					FROM						hotel.alloted, 
+												hotel.company,
+												hotel.family
+					WHERE (company.guest_id = allot.guest_id OR family.guest_id = allot.guest_id) AND 	allot.check_out_date = '2015-01-11';
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.8\columnwidth]{fig23}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+
+\textbf{Qu\_24-}  \textbf{List out the orders for the guest\_id - C1004 during his period of living ?} \\\
+
+\textbf{Ans-}		\textbf{SQL-} \\\
+
+\begin{lstlisting}
+					SELECT			orders.guest_id, 
+										orders.product_id,  
+										orders.date_of_orders, 
+										orders."time", 
+										orders.quantity
+					FROM		hotel.orders
+					WHERE		orders.guest_id = 'C1004'
+\end{lstlisting}						
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[height=0.4\columnwidth]{fig24}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+
+
+\newpage
+\textbf{Qu\_25-}  \textbf{List out the most frequently alloted room ?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+						DROP TABLE frequency1;
+						CREATE TABLE frequency1 AS ( SELECT alloted.room_no,
+						count(alloted.guest_id) as frequency
+						FROM 	hotel.alloted
+						GROUP BY	alloted.room_no
+						ORDER BY	count(allot.guest_id) );
+						DROP TABLE frequency2;
+						CREATE TABLE frequency2 AS ( SELECT	max(frequency) AS 				frequency	FROM	frequency1 );
+						SELECT	*
+						FROM	frequency1	NATURAL JOIN	frequency2
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.4\columnwidth]{fig25}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_26-}  \textbf{Find out the average amount of bill paid by guests visting only for food?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					DROP TABLE 		o_food;
+					CREATE TABLE o_food AS ( SELECT guest.guest_id FROM 														hotel.guest	
+					EXCEPT	
+					SELECT 	allot.guest_id
+					FROM 	hotel.allot 	);
+					DROP TABLE o1_food;
+					CREATE TABLE o1_food AS ( SELECT *	FROM	hotel.bill NATURAL JOIN	o_food );      
+					SELECT	sum(o1_food.amount)/count(o1_food.guest_id) AS average
+					FROM	o1_food;
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.2\columnwidth]{fig26}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_27-}  \textbf{Find out the date on which the maximum number customers came to hotel?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					DROP TABLE new;
+					CREATE TABLE new AS (
+					SELECT 	count( guest.guest_id) AS no_of_customers,
+										date(guest.entry_time)
+					FROM 	hotel.guest
+					GROUP BY	date(guest.entry_time) );
+					DROP TABLE new1;
+					CREATE TABLE new1 AS (
+					SELECT	max(no_of_customers) AS no_of_customers
+										FROM	new );
+					SELECT	*
+					FROM	new	NATURAL JOIN	new1
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.7\columnwidth]{fig27}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_28-}  \textbf{List out the guest\_id that paid there bills by Cheque?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					SELECT	bill.guest_id, 
+								bill.bill_no, 
+  		  						bill.paying_method
+					FROM 
+		  						hotel.bill
+					WHERE		bill.paying_method = 'By-Cheque'
+		  			ORDER BY	bill.guest_id
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.4\columnwidth]{fig28}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_29-}  \textbf{List out the guest\_id that paid there bills by Cash?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					SELECT	bill.guest_id, 
+								bill.bill_no, 
+  		  						bill.paying_method
+					FROM 
+		  						hotel.bill
+					WHERE		bill.paying_method = 'By-Cash'
+		  			ORDER BY	bill.guest_id
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.4\columnwidth]{fig29}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_30-}  \textbf{List out the guest\_id that paid there bills by Debit-Card?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					SELECT	bill.guest_id, 
+								bill.bill_no, 
+  		  						bill.paying_method
+					FROM 
+		  						hotel.bill
+					WHERE		bill.paying_method = 'By-Debit Card'
+		  			ORDER BY	bill.guest_id
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.4\columnwidth]{fig30}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_31-}  \textbf{List name, guest\_id of families and company check in on 12-01-2015?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					SELECT DISTINCT		alloted.guest_id, 
+  		  								alloted.check_in_date, 
+ 		  								family.family_head_ssn AS head_ssn_Cname
+					FROM 				hotel.alloted, 
+  										hotel.family
+					WHERE 			(family.guest_id = allot.guest_id ) AND  								allot.check_in_date = '2015-01-12' 	UNION
+					SELECT DISTINCT  	allot.guest_id, 
+		  									allot.check_in_date, 
+ 		 									company.name
+					FROM 					hotel.allot, 
+		 	 								hotel.company
+					WHERE 			(company.guest_id = alloted.guest_id ) AND  								alloted.check_in_date = '2015-01-12'
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.6\columnwidth]{fig31}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_32-}  \textbf{List out guest id with their room-no. that are of family type?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					SELECT 		 	family.guest_id, 
+ 		  								alloted.room_no
+					FROM 				hotel.alloted, 
+		  								hotel.family
+					WHERE 			family.guest_id = alloted.guest_id;
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.5\columnwidth]{fig32}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_33-}  \textbf{List out guest id with their room-no. that are of company type?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					SELECT 		 	company.guest_id, 
+ 		  								alloted.room_no
+					FROM 				hotel.alloted, 
+		  								hotel.company
+					WHERE 			company.guest_id = alloted.guest_id;
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.4\columnwidth]{fig33}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\newpage
+\textbf{Qu\_34-}  \textbf{List out the facility id used by guest that lived in room-no = A101?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					SELECT 		alloted.room_no, 
+  									uses.facility_id, 
+	            				facility.facility_type
+					FROM			hotel.uses, 
+  									hotel.alloted, 
+ 									hotel.facility
+					WHERE		uses.facility_id = facility.facility_id AND
+  				alloted.guest_id = uses.guest_id AND alloted.room_no = 'A101'
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.4\columnwidth]{fig34}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_35-}  \textbf{List out the date on which maximum number of customer of family tpye came to hotel?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					DROP TABLE new2;
+					CREATE TABLE new2 AS ( SELECT  
+  							count(guest.guest_id) as count,
+  							date(guest.entry_time) 
+					FROM		hotel.guest, 
+  								hotel.family
+					WHERE 		family.guest_id = guest.guest_id
+					GROUP BY		date(guest.entry_time) );
+					DROP TABLE 		new3;
+					CREATE TABLE 	new3 as ( SELECT	max(count) as count
+														FROM	new2 );
+					SELECT		*
+					FROM	new2	NATURAL JOIN new3
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.4\columnwidth]{fig35}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_36-}  \textbf{List out the date on which maximum number of customer of company tpye came to hotel?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+					DROP TABLE new2;
+					CREATE TABLE new2 AS ( SELECT  
+  							count(guest.guest_id) as count,
+  							date(guest.entry_time) 
+					FROM		hotel.guest, 
+  								hotel.company
+					WHERE 		company.guest_id = guest.guest_id
+					GROUP BY		date(guest.entry_time) );
+					DROP TABLE 		new3;
+					CREATE TABLE 	new3 as ( SELECT	max(count) as count
+														FROM	new2 );
+					SELECT		*
+					FROM	new2	NATURAL JOIN new3
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.4\columnwidth]{fig36}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+\\\
+
+\textbf{Qu\_37-}  \textbf{Find out the guest\_id that live the maximum number of days in the hotel?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+						DROP TABLE x1;
+						CREATE TABLE x1 AS( SELECT alloted.guest_id,
+							max(alloted.check_out_date-alloted.check_in_date) AS max
+						FROM   hotel.alloted
+						GROUP BY  alloted.guest_id	);
+						DROP TABLE x2 ;
+						CREATE TABLE x2 AS ( SELECT max(max) AS max from x1 );
+						SELECT x1.guest_id,
+									x1.max
+  						FROM    x1 natural join x2
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.4\columnwidth]{fig37}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% KJ END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\newpage
+\textbf{Qu\_38-}  \textbf{List names,guest\_id of families and company check\_in on 11-01-2015 ?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+						SELECT guest_id,Family_Head_name AS name 
+						FROM family 
+						WHERE guest_id IN (SELECT guest_id FROM Guest WHERE 	guest_id like '%F%' and Date(Entry_time)='2015-01-11') 
+ 						UNION 
+						SELECT guest_id,Name AS name 
+						FROM company 
+						WHERE guest_id in (SELECT guest_id FROM Guest WHERE guest_id like '%C%' and Date(Entry_time)='2015-01-11');
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.6\columnwidth]{fig38}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+
+\textbf{Qu\_39-}  \textbf{List names of different companies arrived from 7-1-2015 to 17-1-2015 ?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+						SELECT DISTINCT name 
+						FROM company 
+						WHERE guest_id IN ( SELECT guest_id FROM Allot WHERE guest_id like '%F%' and check_in_date >'2015-01-07' and check_out_date<='2015-01-15'); 
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=1.0\columnwidth]{fig39}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+
+\newpage
+\textbf{Qu\_40-}  \textbf{List guest\_id and name of family arrived on 24-1-2015 but not booked room  ?} \\\
+
+\textbf{Ans-}		\textbf{SQL-}
+\begin{lstlisting}
+						SELECT  family_members.guest_id,
+									family_members.Name  
+						FROM 	family,family_members  
+						WHERE  family_members.guest_id IN ((SELECT guest_id FROM 	bill WHERE payment_Date='2015-01-24' and guest_id like '%F%') 
+						EXCEPT (SELECT Allot.guest_id FROM Allot
+									WHERE Allot.guest_id like '%F%' and check_in_date='2015-01-24'));
+\end{lstlisting}
+\textbf{Output-} \\			   
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=1.0\columnwidth]{fig40}
+\caption{\textbf{{\color{red}Executed output table}}}
+\end{figure}
+
+\newpage
+\subsection*{Embedded SQL in C:}
+Embedded SQL language help in providing a interface that we can directly insert,update,delete data in the pgAdmin3.
+\subsubsection*{Introduction}
+ We all know that embedded sql is the way to connect our database with the pgAdmin, and we can manually insert, delete and update in the database using the user interface.\\\\
+ 
+Here is an embedded sql code for the insertion, deletion and update for three table of our database:\\
+1. Food \\
+2. Facility \&\\
+3. Room \\\\
+
+We wanted to mention the attributes in our tables defined above.\\\\
+1. Food -       \{Product\_Id\{PK\}, rate, type, name\}\\
+2. Facility -   \{Facility\_Id\{PK\},rate, no\_of\_hours, facility\_type\}\\
+3. Room    -    \{Room\_No\{PK\}, rate, type, status\_occupied \}\\\\
+\begin{lstlisting}
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include "sqlca.h"
+
+EXEC SQL INCLUDE sqlca;
+
+EXEC SQL BEGIN DECLARE SECTION;
+
+// Keeping Facility Record
+typedef struct
+{
+varchar f_id[50];
+int f_rate;
+int f_time;
+varchar f_type[50];
+} facility_record;
+
+// Keeping Uses Record
+
+typedef struct
+{
+varchar fa_id[50];
+varchar guest_id[50];
+int quantity;
+} uses_record;
+
+// Keeping Food Record
+typedef struct
+{
+varchar food_id[50];
+int food_rate;
+varchar food_type[50];
+varchar food_name[50];
+} food_record;
+
+
+// Keeping Room Record
+typedef struct
+{
+varchar room_id[50];
+varchar room_type[50];
+int room_rate;
+varchar room_status[50];
+} room_record;
+
+EXEC SQL END DECLARE SECTION;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void prompt(char s[], char t[]) {
+char c;
+int i = 0;
+printf("%s",s);
+while ((c = getchar()) != '\n') {
+t[i] = c;
+i++;
+}
+t[i] = '\0';
+}
+
+// Insert Item on Food
+
+void insert_food()
+{
+
+printf("\n Enter details:\n");
+
+EXEC SQL BEGIN DECLARE SECTION;
+food_record fo;
+EXEC SQL END DECLARE SECTION;
+
+printf("Enter Product ID\n");
+scanf("%s",fo.food_id.arr);
+fo.food_id.len = strlen(fo.food_id.arr);
+
+printf("Enter the food rate\n");
+scanf("%d",&fo.food_rate);
+getchar();
+
+printf("Type of the Food\n ");
+scanf("%s",fo.food_type.arr);
+fo.food_type.len = strlen(fo.food_type.arr);
+
+printf("Enter the Name of the Food");
+scanf("%s",fo.food_name.arr);
+fo.food_name.len = strlen(fo.food_name.arr);
+
+EXEC SQL set transaction read write;
+EXEC SQL insert into food values(:fo.food_id,:fo.food_rate,:fo.food_type,:fo.food_name);
+
+if (sqlca.sqlcode < 0) {
+printf("\n\nPRODUCT (%s) already exists\n",fo.food_id.arr);
+EXEC SQL rollback work;
+EXEC SQL commit;
+return;
+}
+else
+{
+printf("\n New Food Item Added Succesfully\n");
+EXEC SQL commit;
+return;
+}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//  Insert Item in Room
+
+void insert_room()
+{
+printf("Enter the details of the new room\n");
+EXEC SQL BEGIN DECLARE SECTION;
+room_record ro;
+EXEC SQL END DECLARE SECTION;
+
+printf("\nEnter the Room_Number ");
+scanf("%s",ro.room_id.arr);
+ro.room_id.len=strlen(ro.room_id.arr);
+
+printf("\nEnter the type of the room");
+scanf("%s",ro.room_type.arr);
+ro.room_type.len=strlen(ro.room_type.arr);
+
+printf("\nEnter the rate of the room");
+scanf("%d", &ro.room_rate);
+getchar();
+
+printf("\nEnter the Status");
+scanf("%s",ro.room_status.arr);
+ro.room_status.len=strlen(ro.room_status.arr);
+
+
+EXEC SQL set transaction read write;
+EXEC SQL insert into room values(:ro.room_id,:ro.room_type,:ro.room_rate,:ro.room_status);
+
+if (sqlca.sqlcode < 0) {
+printf("\n\nRoom (%s) is already added\n",ro.room_id.arr);
+EXEC SQL rollback work;
+return;
+}
+else 
+{
+printf("\n New Room Added Succesfully\n");
+EXEC SQL commit;
+return;
+} 
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void insert_facility()
+{
+printf("Enter the details of the new facility\n");
+EXEC SQL BEGIN DECLARE SECTION;
+facility_record fo;
+EXEC SQL END DECLARE SECTION;
+
+printf("\nEnter Facility ID ");
+scanf("%s",fo.f_id.arr);
+fo.f_id.len=strlen(fo.f_id.arr);
+
+printf("\nEnter the rate of the facility");
+scanf("%d", &fo.f_rate);
+getchar();
+
+printf("\nEnter the no_of_hours of the facility");
+scanf("%d", &fo.f_time);
+getchar();
+
+printf("\nEnter the type of the facility");
+scanf("%s",fo.f_type.arr);
+fo.f_type.len=strlen(fo.f_type.arr);
+
+EXEC SQL set transaction read write;
+EXEC SQL insert into facility values(:fo.f_id,:fo.f_rate,:fo.f_time,:fo.f_type);
+
+if (sqlca.sqlcode < 0) {
+printf("\n\nFaclity (%s) is already added\n",fo.f_id.arr);
+EXEC SQL rollback work;
+return;
+}
+else 
+{
+printf("\n New Faclity Added Succesfully\n");
+EXEC SQL commit;
+return;
+} 
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void remove_food() 
+{
+EXEC SQL begin declare section;
+food_record frec;
+varchar food_n[50];
+int onum;
+varchar pid[20];
+varchar pname[20];
+varchar ptype[20];
+int prate;
+EXEC SQL end declare section;
+
+printf("Enter Product_ID to be deleted: ");
+scanf("%s",food_n.arr);
+food_n.len = strlen(food_n.arr);
+
+
+EXEC SQL select *
+into :frec
+from food
+where product_id = :food_n;
+
+if (sqlca.sqlcode > 0) {
+printf("Product ID does not exist\n");
+return;
+}
+
+EXEC SQL declare del_cur cursor for
+select product_id from food where product_id = :food_n;
+
+EXEC SQL set transaction read only;
+EXEC SQL open del_cur;
+EXEC SQL fetch del_cur into :onum;
+if (sqlca.sqlcode == 0) {
+printf("food_item is in ordered so delete order first\n");
+EXEC SQL commit;
+return;
+}
+
+EXEC SQL commit;
+EXEC SQL set transaction read write;
+EXEC SQL delete from food where product_id = :food_n;
+EXEC SQL DECLARE deleteS CURSOR FOR
+            SELECT * FROM food WHERE product_id = :food_n;
+ 
+   EXEC SQL OPEN deleteS;
+ 
+   do {
+      EXEC SQL FETCH deleteS INTO :pid, :prate, :ptype, :pname;
+      if (sqlca.sqlcode != 0) 
+       break;
+      printf( "\nDeleting the product...\n");
+      EXEC SQL DELETE FROM food WHERE CURRENT OF deleteS;
+      } while ( 1 );
+ 
+   EXEC SQL CLOSE deleteS;
+printf("\nFood DELETED\n");
+EXEC SQL commit;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void remove_facility() 
+{
+EXEC SQL begin declare section;
+facility_record farec;
+uses_record urec;
+varchar faci_n[50];
+int onum;
+varchar fid[20];
+varchar ftype[20];
+int ftime[20];
+int frate;
+EXEC SQL end declare section;
+
+printf("Enter Facility_ID to be deleted: ");
+scanf("%s",faci_n.arr);
+faci_n.len = strlen(faci_n.arr);
+
+
+EXEC SQL select *
+into :farec
+from facility
+where facility_id = :faci_n;
+
+if (sqlca.sqlcode > 0) {
+printf("Facility ID  does not exist\n");
+	return;
+
+}
+
+
+EXEC SQL declare del_cur1 cursor for
+select facility_id from facility where facility_id = :faci_n;
+
+EXEC SQL set transaction read only;
+EXEC SQL open del_cur1;
+EXEC SQL fetch del_cur1 into :onum;
+if (sqlca.sqlcode == 0) {
+printf("facility_id is in use so delete order first\n");
+EXEC SQL commit;
+return;
+}
+
+EXEC SQL commit;
+EXEC SQL set transaction read write;
+EXEC SQL delete from facility where facility_id = :faci_n;
+EXEC SQL DECLARE deleteP CURSOR FOR
+            SELECT * FROM facility WHERE facility_id = :faci_n;
+ 
+   EXEC SQL OPEN deleteP;
+ 
+   do {
+      EXEC SQL FETCH deleteP INTO :fid, :frate, :ftime, :ftype;
+      if (sqlca.sqlcode != 0) break;
+      printf( "\nDeleting the facility id...\n");
+      EXEC SQL DELETE FROM facility WHERE CURRENT OF deleteS;
+      } while ( 1 );
+ 
+   EXEC SQL CLOSE deleteP;
+printf("\nFacility DELETED\n");
+EXEC SQL commit;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void remove_room() 
+{
+EXEC SQL begin declare section;
+room_record rrec;
+varchar room_n[50];
+int onum;
+varchar rid[20];
+varchar rtype[20];
+varchar rstatus[20];
+int rrate;
+EXEC SQL end declare section;
+
+printf("Enter Room_Number to be deleted: ");
+scanf("%s",room_n.arr);
+room_n.len = strlen(room_n.arr);
+
+
+EXEC SQL select *
+into :rrec
+from room
+where room_no = :room_n;
+
+if (sqlca.sqlcode > 0) {
+printf("Room does not exist\n");
+return;
+}
+
+
+EXEC SQL declare del_cur2 cursor for
+select room_no from room where room_no = :room_n;
+
+EXEC SQL set transaction read only;
+EXEC SQL open del_cur2;
+EXEC SQL fetch del_cur2 into :onum;
+if (sqlca.sqlcode == 0) {
+printf("room_no is alloted first delete the allot\n");
+EXEC SQL commit;
+return;
+}
+
+EXEC SQL commit;
+EXEC SQL set transaction read write;
+EXEC SQL delete from room where room_no = :room_n;
+EXEC SQL DECLARE deleteQ CURSOR FOR
+            SELECT * FROM room facility WHERE room_no= :room_n;
+ 
+   EXEC SQL OPEN deleteQ;
+ 
+   do {
+      EXEC SQL FETCH deleteQ INTO :rid, :rtype, :rrate, :rstatus;
+      if (sqlca.sqlcode != 0) break;
+      printf( "\nDeleting the given Room...\n");
+      EXEC SQL DELETE FROM room WHERE CURRENT OF deleteS;
+      } while ( 1 );
+ 
+   EXEC SQL CLOSE deleteQ;
+printf("\nRoom DELETED\n");
+EXEC SQL commit;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void update_food() {
+
+EXEC SQL SET SEARCH_PATH TO hotel;
+EXEC SQL begin declare section;
+food_record food1;
+varchar fo_id[40];
+varchar foo_id[40];
+varchar n[30];
+varchar t[30];
+int r;
+int temp;
+EXEC SQL end declare section;
+
+printf("Enter the product_id you want to update\n ");
+scanf("%s",fo_id.arr);
+fo_id.len = strlen(fo_id.arr);
+EXEC SQL select *
+into
+:food1
+from
+food
+where product_id = :fo_id;
+if (sqlca.sqlcode > 0) {
+printf("food_item(%s) does not exist\n",fo_id.arr);
+return;
+}
+
+printf("Current rate: %d\n",food1.food_rate);
+printf("Enter the rate :\n ");
+scanf("%d", &r);
+food1.food_rate = r;
+
+printf("Current Tpye%s\n",food1.food_type.arr);
+printf("New Type of the food : \n");
+scanf("%s",t.arr);
+if (strlen(t.arr) > 1) {
+strcpy(food1.food_type.arr,t.arr);
+food1.food_type.len = strlen(food1.food_type.arr);
+}
+
+printf("Current Name%s\n",food1.food_name.arr);
+printf("New Name of the food :\n ");
+scanf("%s", n.arr);
+if (strlen(n.arr) > 1) {
+strcpy(food1.food_name.arr,n.arr);
+food1.food_name.len = strlen(food1.food_name.arr);
+}
+
+
+
+EXEC SQL set transaction read write; 
+EXEC SQL UPDATE food
+set product_id = :food1.food_id,
+rate = :food1.food_rate,
+type = :food1.food_type,
+name = :food1.food_name
+where product_id = :food1.food_id;
+if (sqlca.sqlcode < 0) {
+printf("\n\nError on Update\n");
+EXEC SQL rollback work;
+return;
+}
+EXEC SQL commit;
+printf("\nFood Item (%s) updated.\n",food1.food_id.arr);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_room() {
+
+EXEC SQL SET SEARCH_PATH TO hotel;
+EXEC SQL begin declare section;
+room_record room1;
+varchar ro_id[40];
+varchar roo_id[40];
+varchar rs[30];
+varchar t[30];
+int r;
+EXEC SQL end declare section;
+
+printf("Enter the room_id you want to update \n");
+scanf("%s",ro_id.arr);
+ro_id.len = strlen(ro_id.arr);
+EXEC SQL select *
+into
+:room1
+from
+room
+where room_no = :ro_id;
+if (sqlca.sqlcode > 0) {
+printf("room(%s) does not exist\n",ro_id.arr);
+return;
+}
+
+printf("Current rate: %d\n",room1.room_rate);
+printf("Enter the rate:\n ");
+scanf("%d", &r);
+room1.room_rate = r;
+
+printf("Current Tpye%s\n",room1.room_type.arr);
+printf("New Type of the room:\n");
+scanf("%s",t.arr);
+if (strlen(t.arr) > 1) {
+strcpy(room1.room_type.arr,t.arr);
+room1.room_type.len = strlen(room1.room_type.arr);
+}
+
+printf("Current Status%s\n",room1.room_status.arr);
+printf("New Status of the room: \n");
+scanf("%s", rs.arr);
+if (strlen(rs.arr) > 1) {
+strcpy(room1.room_status.arr,rs.arr);
+room1.room_status.len = strlen(room1.room_status.arr);
+}
+
+
+
+EXEC SQL set transaction read write; 
+EXEC SQL UPDATE room
+set room_no = :room1.room_id,
+type = :room1.room_type,
+rate = :room1.room_rate,
+status_occupied = :room1.room_status
+where room_no = :room1.room_id;
+if (sqlca.sqlcode < 0) {
+printf("\n\nError on Update\n");
+EXEC SQL rollback work;
+return;
+}
+EXEC SQL commit;
+printf("\nRoom is (%s) updated.\n",room1.room_id.arr);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void update_facility() {
+
+EXEC SQL SET SEARCH_PATH TO hotel;
+EXEC SQL begin declare section;
+facility_record fac1;
+varchar fa_id[40];
+varchar faa_id[40];
+varchar ft[30];
+int fh;
+int r;
+EXEC SQL end declare section;
+
+printf("Enter the facility_id you want to update \n");
+scanf("%s",fa_id.arr);
+fa_id.len = strlen(fa_id.arr);
+EXEC SQL select *
+into
+:fac1
+from
+facility
+where facility_id = :fa_id;
+if (sqlca.sqlcode > 0) {
+printf("facility(%s) does not exist\n",fa_id.arr);
+return;
+}
+
+printf("Current rate: of the facility %d\n",fac1.f_rate);
+printf("Enter the rate:\n ");
+scanf("%d", &r);
+fac1.f_rate = r;
+
+printf("Current Time for the facility%d\n",fac1.f_time);
+printf("New Time for the facility\n");
+scanf("%d",&fh);
+fac1.f_time = fh;
+
+
+printf("Current Type%s\n",fac1.f_type.arr);
+printf("New Type of the facility: \n");
+scanf("%s", ft.arr);
+if (strlen(ft.arr) > 1) {
+strcpy(fac1.f_type.arr,ft.arr);
+fac1.f_type.len = strlen(fac1.f_type.arr);
+}
+
+
+EXEC SQL set transaction read write; 
+EXEC SQL UPDATE facility
+set facility_id = :fac1.f_id,
+rate = :fac1.f_rate,
+no_of_hours = :fac1.f_time,
+facility_type = :fac1.f_type
+where facility_id = :fac1.f_id;
+if (sqlca.sqlcode < 0) {
+printf("\n\nError on Update\n");
+EXEC SQL rollback work;
+return;
+}
+EXEC SQL commit;
+printf("\nfacility is (%s) updated.\n",fac1.f_id.arr);
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void main_menu()
+{
+printf("\n\n");
+printf("\t\t\t\t\t\tWelcome to GUI For Our Project\n\n");
+printf("\t\t\t*   *   * *****  *    ****  ****   *      *  *****    ***  ****    *  * **** *** **** *   \n");
+printf("\t\t\t * * * *  ***    *    *     *  *   * *  * *  ***       *   *  *    **** *  *  *  ***  *   \n");
+printf("\t\t\t  *   *   *****  **** ****  ****   *   *  *  *****     *   ****    *  * ****  *  **** ***  \n\n");
+
+
+printf("\t\t\t\t\t--------------------Hotel Management System-----------------\n\n");
+printf("\n\t\t\t\t\tPlease select an option:\n");
+printf("\t\t\t\t\t1. Insert a new Entry\n");
+printf("\t\t\t\t\t2. Update an existing entry\n");
+printf("\t\t\t\t\t3. Remove an existing Entry\n");
+printf("\t\t\t\t\t4. Exit\n\n");
+printf("\t\t\t\t\t*********************************************************\n");
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void main_insert()
+{
+int insert_choice;
+printf("Enter the type of a new Entry\n");
+printf("1. Food\n");
+printf("2. Room\n");
+printf("3. Facility\n");
+printf("4. Exit\n");
+printf("Enter your choice:  ");
+scanf("%d",&insert_choice);
+switch(insert_choice)
+{
+case 1:
+insert_food();
+break;
+case 2:
+insert_room();
+break;
+case 3:
+insert_facility();
+break;
+case 4:
+EXEC SQL COMMIT;
+EXEC SQL DISCONNECT;
+exit(0);
+}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void main_remove()
+{
+int remove_choice;
+printf("Enter the type of entry you want to delete\n");
+printf("1. Food\n");
+printf("2. Facility\n");
+printf("3. Room\n");
+printf("4. Exit\n");
+printf("Enter your choice:  ");
+scanf("%d",&remove_choice);
+switch(remove_choice)
+{
+case 1:
+remove_food();
+break;
+case 2:
+remove_facility();
+break;
+case 3:
+remove_room();
+break;
+case 4:
+EXEC SQL COMMIT;
+EXEC SQL DISCONNECT;
+exit(0);
+}
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void main_update()
+{
+int remove_choice;
+printf("Enter the type of entry you want to update\n");
+printf("1. Food\n");
+printf("2. Facility\n");
+printf("3. Room\n");
+printf("4. Exit\n");
+printf("Enter your choice:  ");
+scanf("%d",&remove_choice);
+switch(remove_choice)
+{
+case 1:
+update_food();
+break;
+case 2:
+update_facility();
+break;
+case 3:
+update_room();
+break;
+case 4:
+EXEC SQL COMMIT;
+EXEC SQL DISCONNECT;
+exit(0);
+}
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+int main()
+{
+EXEC SQL CONNECT TO try_project@localhost:5432 USER postgres;
+EXEC SQL set search_path to hotel;;
+int main_choice;
+X:
+main_menu();
+printf("\nEnter your choice (eg. 1 for 1st choice):  ");
+scanf("%d",&main_choice);
+switch(main_choice)
+{
+case 1:
+main_insert();
+goto X;
+break;
+case 2:
+main_update();
+goto X;
+break;
+case 3:
+main_remove();
+goto X;
+break;
+case 4:
+EXEC SQL COMMIT;
+EXEC SQL DISCONNECT;
+exit(0);
+default:
+printf("Re-enter your choice");
+goto X;
+}
+EXEC SQL DISCONNECT try_project;
+return 0;
+}
+
+\end{lstlisting}
+\begin{figure}[hbtp]
+\centering
+\includegraphics[height = 0.7\columnwidth]{e}
+\caption{\textbf{{\color{red} Sample output of Embedded sql Query}}}
+\end{figure}
+
+\section*{Conclusion:} HMS resolves almost all queries that a real world HMS should answer. It not only stores a huge database, but also manipulates, deletes, and updates data efficiently.
+
+\section *{Refrences :}
+\url {http://tinman.cs.gsu.edu/~raj/books/Oracle9-chapter-3.pdf} \\
+\url{en.wikipedia.org}
+\end{document}

@@ -1,0 +1,354 @@
+\documentclass[a4,12pt]{report}
+\usepackage{graphicx,amsmath,amssymb,amsfonts,listings,color}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{graphicx,amsmath,amssymb,amsfonts,listings,color}
+\usepackage{geometry}
+\geometry{top=10mm, left=30mm, right=30mm, bottom=10mm}
+\usepackage{url}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=none,
+  language=sql,				% whatever language you can choose
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\title{ Project Report \\
+						\textbf{Databse Management System}} 
+\author{\textbf{ Group\_7 }}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{ Queries and their Relational algebra expression}
+
+\textbf{Qu-1} \textbf{  List out the total numbers of vacant rooms ?}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra1}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+
+\textbf{Qu-2} \textbf{ List out the total numbers of filled rooms ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra2}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-3} \textbf{ List the guest id with their room no, tpye of the room ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra3}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-4} \textbf{ List the guest id who only had food in hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra4}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-5} \textbf{ Find out the details of the very first customer of the hotel ?}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra5}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-6} \textbf{ List out the number of items in each type of food ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra6}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-7} \textbf{ List out the most ordered food items ate by the customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[height = 0.4\columnwidth]{ra7}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-8} \textbf{ List out guest id which uses all types of facilities ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra8}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-9} \textbf{ List guest id that lived in room no = ’A401’ and used facility id = FC001 ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.0\columnwidth]{ra9}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-10} \textbf{ List out the guest id who were alloted more than or equal to 2 rooms ?}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra10}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-11} \textbf{ Total Amount paid by the family type customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra11}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-12} \textbf{ Total Amount paid by the company type customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra12}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-13} \textbf{ Find out the name of that company that came with maximum number of employee ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra13}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-14} \textbf{ Most Profitable guest id that is of family type customer ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra14}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-15} \textbf{ Most Profitable guest id that is of company type customer ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra15}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-16} \textbf{ List out the Head SSN with Head Name who came twice to the hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra16}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-17} \textbf{ List the falility used by more than 10 customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra17}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-18} \textbf{ List out the different company names with their number of employees ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra18}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-19} \textbf{ List out the guest id of the family type with the maximum number of members with them ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra19}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-20} \textbf{ List out the facility used by the most number of customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra20-1}
+\caption{\textbf{{\color{red}}}}
+\end{figure}
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra20-2}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-21} \textbf{ Find out the total food amount on a particular date given by the customers ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 0.9\columnwidth]{ra21}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-22} \textbf{ List out the guest id that orders all types of foods ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra22}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-23} \textbf{ List out the total number of people who checked out on 11-01-2015 ?}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra23}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-24} \textbf{ List out the orders for the guest id - C1004 during his period of living ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.0\columnwidth]{ra24}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-25} \textbf{ List out the most frequently alloted room ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra25}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-26} \textbf{ Find out the average amount of bill paid by guests visting only for food ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra26}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-27} \textbf{ Find out the date on which the maximum number customers came to hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra27}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-28} \textbf{ List out the guest id that paid there bills by Cheque?
+}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.0\columnwidth]{ra28}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+
+\textbf{Qu-29} \textbf{ List out the guest id that paid there bills by Cash?
+}\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra29}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-30} \textbf{ List out the guest id that paid there bills by Debit-Card ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra30}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-31} \textbf{ List name, guest id of families and company check in on 12-01-2015 ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra31}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-32} \textbf{ List out guest id with their room-no. that are of family type ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra32}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-33} \textbf{ List out guest id with their room-no. that are of company type ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra33}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-34} \textbf{ List out the facility id used by guest that lived in room-no = A101 ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra34}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\textbf{Qu-35} \textbf{ List out the date on which maximum number of customer of family tpye came to hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra35}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+\newpage
+\textbf{Qu-36} \textbf{ List out the date on which maximum number of customer of company tpye came to hotel ? }\\
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width = 1.1\columnwidth]{ra36}
+\caption{\textbf{{\color{red}Relational Algebra Expression}}}
+\end{figure}
+
+
+\end{document}
